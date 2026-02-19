@@ -3,6 +3,7 @@ import tensorflow_datasets as tfds
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import tensorflowjs as tfjs
 
 data, meta = tfds.load("fashion_mnist", as_supervised=True, with_info=True)
 labels = meta.features["label"].names
@@ -92,6 +93,9 @@ for i in range(num_imagenes):
 plt.show()
 
 #Save model
-model.save("modelTopologyAndWeights.h5")
+model.save("modelTopologyAndWeights_Clasifier.h5")
+
+#export model
+tfjs.converters.save_keras_model(model, "modelJS")
 
 print("Stop")

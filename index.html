@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Clasifier and Handwritten detection</title>
+    <style>
+        :root {
+            --bg-1: #0f172a;
+            --bg-2: #1f2937;
+            --accent: #7c3aed;
+            --glass: rgba(255, 255, 255, 0.06);
+            --muted: rgba(255, 255, 255, 0.75);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(1200px 600px at 10% 20%, rgba(124, 58, 237, 0.12), transparent 10%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            color: white;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .card {
+            width: min(900px, 92%);
+            padding: 48px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            backdrop-filter: blur(6px) saturate(120%);
+        }
+
+        h1 {
+            margin: 0 0 12px 0;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            color: white;
+        }
+
+        .lead {
+            margin: 0 0 22px 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 12px 0;
+            line-height: 1.7;
+            max-width: 60ch;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent), #4f46e5);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.18);
+        }
+
+        .meta {
+            margin-top: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="card" role="main">
+        <h1>Welcome to the Demo Page</h1>
+
+        <p>This is a web page to convert Celsius to Farenheit degrees</p>
+
+        <p>Please choose a value in the slider</p>
+        <div class="card" id="myRange" style="display:none;">
+<p >
+        <input type="range" min="-200" max="200" value="0" class="slider"  style="width:100%" onchange="onChangeSlider(this.value)">
+</p>
+<br/>
+<p>
+        The value in Farenheit is: <span id="farenheitValue">32</span>
+</p>
+</div>
+        <a href="#" id="toggleButton" class="cta" onclick="document.getElementById('myRange').style.display='block';document.getElementById('toggleButton').style.display='none';">Get Started</a>
+
+        <div class="meta">Lorem ipsum dolor sit amet, consectetur adipiscing elit — sit amet, consectetur.</div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>.
+    <script>
+        var model = null;
+        // Example TensorFlow.js code to load a model and make a prediction
+        async function loadModel() {
+            console.log('Loading model...');
+            const model = await tf.loadLayersModel('converter/model.json');
+            console.log('Model loaded successfully!');
+            // You can add code here to make predictions using the model
+        }
+        function onChangeSlider(value) {
+            if(model!=null){
+                let tensor = tf.tensor1d([parseFloat(value)]);
+                let prediction = model.predict(tensor).dataSync();
+                document.getElementById("farenheitValue").innerText = prediction[0].toFixed(2);
+            }else{
+                document.getElementById("farenheitValue").innerText = (1.79815*parseFloat(value)+31.8156).toFixed(2);
+                //console.log("Model not loaded yet");
+                //alert("Model not loaded yet, please wait a moment and try again.");
+            }
+        }
+        loadModel();
+    </script>
+</body>
+
+</html>
